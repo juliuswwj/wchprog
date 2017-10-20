@@ -1,6 +1,6 @@
 # wchprog
 
-A python program that downloads firmware of CH55x chips through USB link.
+A python script that programs firmware of CH55x chips through USB link.
 
 needs: pyusb 1.0 
 https://walac.github.io/pyusb/
@@ -35,4 +35,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-# Copyright(C) 2017 juliuswwj@gmail.com
+# Copyright
+(C) 2017 juliuswwj@gmail.com
