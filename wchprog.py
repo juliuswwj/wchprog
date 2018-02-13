@@ -104,7 +104,7 @@ class WCHISP:
 
         wv('\xa8')
 
-        self.cmd('\xb8\x02\xff\xf6')
+        self.cmd('\xb8\x02\xff\x4e') # Code_Protect, Boot_Load, No_Long_Reset, No_RST 
         self.cmd('\xb9\x00')
 
         wv('\xa7')
