@@ -57,11 +57,11 @@ class WCHISP:
         dev = usb.core.find(idVendor=0x4348, idProduct=0x55e0)
         if dev is None:
             raise ValueError('Device not found')
-        
+
         dev.set_configuration()
         cfg = dev.get_active_configuration()
         intf = cfg[(0, 0)]
-        
+
         self.epout = usb.util.find_descriptor(intf, custom_match = lambda e: usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_OUT)
         self.epin = usb.util.find_descriptor(intf, custom_match = lambda e: usb.util.endpoint_direction(e.bEndpointAddress) == usb.util.ENDPOINT_IN)
 
@@ -72,8 +72,19 @@ class WCHISP:
             return struct.unpack('<H', b)[0]
         return b
 
+    def xcmd(self, msg, exp):
+        #xmsg = map(lambda x: hex(ord(x))[2:], msg)
+        #print ' '.join(xmsg)
+        #return 0
+
+        ret = self.cmd(msg)
+        if ret != exp:
+            xmsg = map(lambda x: hex(ord(x)), msg[0:4])
+            raise Exception('cmd[%s] return %d != %d' % (','.join(xmsg), ret, exp))
+
     def info(self):
         v = self.cmd('\xa2\x13USB DBG CH559 & ISP' + '\0')
+        self.cmd('\xbb\x00')
         return v
 
     def readb(self, size):
@@ -83,6 +94,9 @@ class WCHISP:
         self.epout.write(b)
 
     def dump(self):
+        # send the key
+        b = '\xa6\x04' + struct.pack('BBBB', *scrambleCode)
+        self.xcmd(b, 0)
         # find block of 16 0xFF at the end of the device memory
         block = [0xff] * 16
         found = False
